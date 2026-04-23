@@ -23,15 +23,17 @@ export const calculatePctChange = (current: number, previous: number): string =>
   return `${change > 0 ? '+' : ''}${change.toFixed(1)}%`;
 };
 
-export const getRiskColor = (status: string): string => {
-  const risks: Record<string, string> = {
-    "La Niña Watch": "bg-red-500",
-    "El Niño Advisory": "bg-orange-500",
-    "Neutral": "bg-green-500"
-  };
-  return risks[status] || "bg-slate-500";
-};
-
 export const convertToKg = (mtValue: number): number => {
   return mtValue * 1000;
+};
+
+// Risk color mapping - moved outside function to avoid recreating on each call
+const RISK_COLOR_MAP: Record<string, string> = {
+  "La Niña Watch": "bg-red-500",
+  "El Niño Advisory": "bg-orange-500",
+  "Neutral": "bg-green-500"
+};
+
+export const getRiskColor = (status: string): string => {
+  return RISK_COLOR_MAP[status] || "bg-slate-500";
 };
