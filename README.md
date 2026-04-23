@@ -1,1 +1,1 @@
-AgriMonitorPH: Real-time agricultural dashboard.
+Welcome to the AgriMonitorPH platform.
