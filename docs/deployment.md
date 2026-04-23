@@ -3,7 +3,6 @@
 ## Target Environment
 * **Platform:** Vercel (Production)
 * **Framework:** Next.js (App Router)
-* **Database:** Supabase (Remote Instance)
 
 ## Rollout Strategy: Blue-Green Deployment
 We utilize Vercel's atomic deployments. Every push to `main` creates a unique preview URL. Once verified, the production alias is updated to point to the new build, ensuring zero downtime.
