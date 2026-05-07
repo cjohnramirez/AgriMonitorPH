@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const isStockCritical = (amount: number): boolean => {
-  return amount < 500000; 
+  return amount < 400000; 
 };
 
 export const formatPHP = (value: number): string => {
