@@ -28,9 +28,8 @@ jobs:
           pnpm test
 
       - name: Deploy to Vercel
-        # We run from the root but tell the CLI specifically where the project lives
         run: |
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --local-config ./frontend/.vercel/project.json --cwd ./frontend
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --cwd ./frontend
           vercel build --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd ./frontend
           vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd ./frontend
         env:
