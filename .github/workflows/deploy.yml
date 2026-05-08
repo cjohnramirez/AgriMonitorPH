@@ -22,18 +22,18 @@ jobs:
         run: npm install -g vercel
 
       - name: Install and Test
-        working-directory: ./frontend
         run: |
+          cd frontend
           pnpm install --no-frozen-lockfile
           pnpm test
 
       - name: Deploy to Vercel
-        working-directory: ./frontend
+        # Notice: We DO NOT 'cd frontend' here. 
+        # We run from the root, and the Vercel Cloud settings handle the pathing.
         run: |
-          # 1. Force Vercel to pull current project settings
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          # 2. Deploy directly from the subfolder (this builds AND uploads)
-          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
