@@ -1,9 +1,19 @@
+"use client";
+
+import { useEffect } from "react";
+import { logEvent } from "@/lib/logger";
+
 import { MARKET_DATA } from "@/lib/constants";
 import { formatPHP, calculatePctChange } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Store, Info, TrendingUp, TrendingDown } from "lucide-react";
 
 export default function MarketsPage() {
+  useEffect(() => {
+    // Log that the landing page was successfully rendered
+    logEvent('PAGE_VIEW', { page: 'Home', status: 'success' });
+  }, []);
+
   return (
     <div className="grid grid-cols-12 gap-6">
       <div className="col-span-3 space-y-6">
