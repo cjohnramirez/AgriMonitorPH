@@ -21,9 +21,10 @@ jobs:
       - name: Install and Test
         run: |
           cd frontend
-          pnpm install --no-frozen-lockfile
+          # Force pnpm to ignore workspace rules and install normally
+          pnpm install --no-frozen-lockfile --ignore-workspace
           pnpm test
-
+          
       - name: Deploy to Vercel
         # Notice we run this from the ROOT of the repository.
         # Vercel reads the Dashboard settings and handles the 'frontend' path automatically.
