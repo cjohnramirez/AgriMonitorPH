@@ -29,10 +29,15 @@ jobs:
           pnpm install --no-frozen-lockfile
           pnpm test
 
-      - name: Deploy to Vercel
+      - name: Build and Deploy
         run: |
+          # 1. Pull settings
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          # 2. Standard Build to generate .next folder
+          pnpm build
+          # 3. Vercel Build to convert .next to .vercel/output
           vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          # 4. Final Deploy
           vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
