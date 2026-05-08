@@ -18,6 +18,9 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm@8
 
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
       - name: Install and Test
         run: |
           cd frontend
@@ -25,12 +28,16 @@ jobs:
           pnpm test
 
       - name: Deploy to Vercel
-        # We run from the ROOT. Vercel will upload the source code
-        # and build it remotely using your Dashboard settings.
-        run: |
-          npm install -g vercel
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          cd frontend
+          # 1. Pull settings into this specific folder
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          
+          # 2. Build exactly here
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          
+          # 3. Deploy the prebuilt output directly to the root URL
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
