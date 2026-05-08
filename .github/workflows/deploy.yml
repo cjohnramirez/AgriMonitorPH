@@ -7,6 +7,9 @@ on:
 jobs:
   test-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v4
 
@@ -23,15 +26,14 @@ jobs:
 
       - name: Install and Test
         run: |
-          cd frontend
-          pnpm install --no-frozen-lockfile --ignore-workspace
+          pnpm install --no-frozen-lockfile
           pnpm test
 
       - name: Deploy to Vercel
         run: |
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --cwd ./frontend
-          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd ./frontend
-          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd ./frontend
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
