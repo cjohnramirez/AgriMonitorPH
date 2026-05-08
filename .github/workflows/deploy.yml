@@ -7,6 +7,10 @@ on:
 jobs:
   test-and-deploy:
     runs-on: ubuntu-latest
+    # This locks EVERY step below into the frontend folder automatically
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v4
 
@@ -18,26 +22,18 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm@8
 
-      - name: Install Vercel CLI
-        run: npm install -g vercel
-
       - name: Install and Test
         run: |
-          cd frontend
           pnpm install --no-frozen-lockfile
           pnpm test
 
       - name: Deploy to Vercel
+        run: |
+          npm install -g vercel
+          # 1. Pull the cloud settings down to the local runner
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          # 2. Upload the source code and build on Vercel's servers
+          vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-        run: |
-          cd frontend
-          # 1. Pull settings into this specific folder
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          
-          # 2. Build exactly here
-          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-          
-          # 3. Deploy the prebuilt output directly to the root URL
-          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
